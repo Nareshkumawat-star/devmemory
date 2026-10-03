@@ -1,69 +1,265 @@
-import Image from "next/image";
+import Link from "next/link";
+import type { Metadata } from "next";
+import { Button } from "@/components/ui/button";
+import { Link000, Link001, Link004 } from "@/components/ui/skiper-ui/skiper40";
+import {
+  Brain,
+  Search,
+  BarChart3,
+  Dumbbell,
+  AlertTriangle,
+  MessageSquare,
+  ArrowRight,
+  Sparkles,
+  Zap,
+  Code2,
+  CheckCircle2,
+} from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "DevMemory - RAG Coding Assistant",
+  description:
+    "DevMemory turns your past coding mistakes into personalized guidance with a RAG pipeline over your own coding memories.",
+};
+
+const features = [
+  {
+    icon: Brain,
+    title: "AI Mistake Analysis",
+    description:
+      "Gemma analyzes your code snippets and stack traces to detect root causes, severity levels, and missed logic.",
+  },
+  {
+    icon: Search,
+    title: "Atlas Vector Search",
+    description:
+      "Vector embeddings search your historical memories semantically, matching logic patterns rather than just keywords.",
+  },
+  {
+    icon: MessageSquare,
+    title: "Grounded Q&A",
+    description:
+      "Ask coding questions and receive answers strictly grounded in bugs and fixes you have personally encountered.",
+  },
+  {
+    icon: AlertTriangle,
+    title: "Recurring Bug Detection",
+    description:
+      "Every saved error is tagged and categorized so recurring anti-patterns surface automatically.",
+  },
+  {
+    icon: BarChart3,
+    title: "Progress Analytics",
+    description:
+      "Track mistake frequency, severity trends, and topic weaknesses over days, weeks, and months.",
+  },
+  {
+    icon: Dumbbell,
+    title: "Personalized Practice",
+    description:
+      "Generate tailored coding practice problems targeting the exact concepts you struggle with most.",
+  },
+];
+
+const pipeline = [
+  { step: "01", title: "Save Memory", body: "Log your snippet, target problem description, and thrown error." },
+  { step: "02", title: "AI Analysis", body: "Gemma extracts root cause, difficulty level, and key takeaways." },
+  { step: "03", title: "Vector Embed", body: "Generates high-dimensional vector embeddings stored in MongoDB." },
+  { step: "04", title: "Semantic Retrieval", body: "Atlas Vector Search fetches relevant historical solutions." },
+  { step: "05", title: "Grounded Answer", body: "Get customized AI insights tailored to your exact memory base." },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
+    <div className="min-h-screen flex flex-col bg-slate-900 text-slate-100 selection:bg-blue-600 selection:text-white">
+      {/* Header */}
+      <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-900/90 backdrop-blur-md">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+          <Link href="/" className="flex items-center gap-2.5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white font-bold shadow-md shadow-blue-500/20">
+              <Code2 className="h-5 w-5 text-white" />
+            </div>
+            <span className="text-xl font-bold tracking-tight text-white">
+              Dev<span className="text-blue-400">Memory</span>
+            </span>
+          </Link>
+
+          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
+            <Link000 href="/dashboard/overview" className="hover:text-blue-400 transition-colors">
+              Dashboard
+            </Link000>
+            <Link000 href="/memories/new" className="hover:text-blue-400 transition-colors">
+              Save Memory
+            </Link000>
+            <Link000 href="/dashboard/overview" className="hover:text-blue-400 transition-colors">
+              Analytics
+            </Link000>
+          </nav>
+
+          <div className="flex items-center gap-3">
+            <Button size="sm" asChild className="bg-blue-600 hover:bg-blue-500 text-white font-medium shadow-sm">
+              <Link href="/memories/new" className="flex items-center gap-1.5">
+                <Sparkles className="h-4 w-4" />
+                New Memory
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="relative overflow-hidden pt-20 pb-16 gradient-bg-hero">
+        <div className="relative mx-auto flex max-w-5xl flex-col items-center gap-8 px-6 text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1.5 text-xs font-semibold text-blue-300">
+            <Sparkles className="h-3.5 w-3.5 text-blue-400" />
+            <span>Powered by Gemma AI & Atlas Vector Search</span>
+          </div>
+
+          <h1 className="text-4xl font-bold tracking-tight sm:text-6xl max-w-4xl leading-tight text-white">
+            Turn your coding mistakes into{" "}
+            <span className="text-blue-400">your personal memory</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+
+          <p className="max-w-2xl text-lg text-slate-400 leading-relaxed">
+            DevMemory logs your coding errors, analyzes root causes with Gemma AI, and retrieves past solutions using vector search so you never make the same mistake twice.
+          </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-6 pt-2">
+            <Button size="lg" asChild className="bg-blue-600 hover:bg-blue-500 text-white font-medium shadow-md shadow-blue-600/20 h-12 px-7">
+              <Link href="/memories/new" className="flex items-center gap-2">
+                Save your first memory
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+            <Link001 href="/dashboard/overview" className="text-blue-400 font-semibold text-base hover:text-blue-300">
+              Explore Dashboard
+            </Link001>
+          </div>
+
+          {/* Stats Bar */}
+          <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-4 w-full max-w-3xl">
+            <div className="rounded-xl border border-slate-800 bg-slate-800/50 p-4 text-center">
+              <div className="text-xl font-bold text-blue-400">RAG Pipeline</div>
+              <div className="text-xs text-slate-400 mt-1">Vector Grounded</div>
+            </div>
+            <div className="rounded-xl border border-slate-800 bg-slate-800/50 p-4 text-center">
+              <div className="text-xl font-bold text-emerald-400">Gemma AI</div>
+              <div className="text-xs text-slate-400 mt-1">Root Cause Analysis</div>
+            </div>
+            <div className="rounded-xl border border-slate-800 bg-slate-800/50 p-4 text-center">
+              <div className="text-xl font-bold text-sky-400">100% Personal</div>
+              <div className="text-xs text-slate-400 mt-1">Your Own History</div>
+            </div>
+            <div className="rounded-xl border border-slate-800 bg-slate-800/50 p-4 text-center">
+              <div className="text-xl font-bold text-indigo-400">Analytics</div>
+              <div className="text-xs text-slate-400 mt-1">Weakness Radar</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pipeline */}
+      <section className="mx-auto w-full max-w-6xl px-6 py-16 border-t border-slate-800">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+            How the <span className="text-blue-400">RAG Pipeline</span> Works
+          </h2>
+          <p className="mt-2 text-slate-400 text-sm">
+            Every coding snippet you log flows seamlessly through a 5-step feedback loop.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {pipeline.map((item) => (
+            <div
+              key={item.step}
+              className="rounded-xl border border-slate-800 bg-slate-800/40 p-5 flex flex-col justify-between hover:border-blue-500/50 transition-colors"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full text-blue-300 bg-blue-500/10 border border-blue-500/20">
+                  {item.step}
+                </span>
+                <CheckCircle2 className="h-4 w-4 text-slate-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-base text-slate-100">
+                  {item.title}
+                </h3>
+                <p className="mt-1.5 text-xs text-slate-400 leading-relaxed">
+                  {item.body}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
-      </main>
+      </section>
+
+      {/* Features Grid */}
+      <section className="border-t border-slate-800 bg-slate-900/60 py-16">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+              Core Capabilities
+            </h2>
+            <p className="mt-2 text-slate-400 text-sm">
+              Built with Next.js 16, Monaco Editor, MongoDB Vector Search, and Gemma AI.
+            </p>
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {features.map((feature) => (
+              <div
+                key={feature.title}
+                className="rounded-xl border border-slate-800 bg-slate-800/40 p-6 hover:border-blue-500/40 transition-colors"
+              >
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400 mb-4 border border-blue-500/20">
+                  <feature.icon className="h-5 w-5" />
+                </div>
+                <h3 className="text-lg font-semibold text-slate-100 mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-sm text-slate-400 leading-relaxed">
+                  {feature.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Card */}
+      <section className="mx-auto w-full max-w-5xl px-6 py-16">
+        <div className="rounded-2xl border border-slate-800 bg-slate-800/50 p-10 text-center">
+          <div className="max-w-2xl mx-auto flex flex-col items-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-3.5 py-1 text-xs font-semibold text-blue-300 mb-5">
+              <Zap className="h-3.5 w-3.5 text-blue-400" />
+              <span>Get started immediately</span>
+            </div>
+
+            <h2 className="text-2xl font-bold sm:text-3xl text-white tracking-tight mb-3">
+              Ready to stop repeating coding errors?
+            </h2>
+            <p className="text-slate-400 text-sm mb-6">
+              Create your first memory now and let AI elevate your engineering productivity.
+            </p>
+
+            <Link004 href="/memories/new" className="text-blue-400 font-semibold text-lg hover:text-blue-300">
+              Create a Memory Now
+            </Link004>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="mt-auto border-t border-slate-800 bg-slate-950 py-8 text-center text-xs text-slate-500">
+        <div className="mx-auto max-w-6xl px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2 font-semibold text-slate-300">
+            <Code2 className="h-4 w-4 text-blue-500" />
+            <span>DevMemory</span>
+          </div>
+          <p>© {new Date().getFullYear()} DevMemory — Personalized AI Coding Memory</p>
+        </div>
+      </footer>
     </div>
   );
 }
