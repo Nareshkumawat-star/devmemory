@@ -86,13 +86,22 @@ describe("topicWeakness", () => {
     ];
     expect(topicWeakness(memories)).toEqual({ "Check types early": 2 });
 
-    // Empty lessons and missing tags are ignored, not reported as a blank topic.
+    // Empty/blank lessons and memories with no tags + no lesson are ignored,
+    // never reported as a blank topic.
     const mixed = [
       makeMemory({ lessonLearned: "" }),
       makeMemory({ lessonLearned: "  " }),
-      makeMemory({}), // no tags, no lesson
+      makeMemory({ tags: ["maps"], lessonLearned: "" }), // tags win, empty lesson ignored
+      makeMemory({}), // defaults to lessonLearned "Check types early" from helper (1 copy)
     ];
-    expect(topicWeakness(mixed)).toEqual({});
+    expect(topicWeakness(mixed)).toEqual({ "Check types early": 1, maps: 1 });
+
+    // topicWeakness is case-preserving; it does not lowercase keys.
+    const caseMixed = [
+      makeMemory({ lessonLearned: "Use strict" }),
+      makeMemory({ lessonLearned: "use strict" }),
+    ];
+    expect(topicWeakness(caseMixed)).toEqual({ "Use strict": 1, "use strict": 1 });
 
     // Tags take precedence over lessonLearned for the topic name.
     const tagged = [
