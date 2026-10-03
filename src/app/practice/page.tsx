@@ -9,7 +9,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Button } from "@/components/ui/button";
 import { PracticePanel } from "@/components/ai/PracticePanel";
-import { BookOpen, Lightbulb, Plus, Target, TrendingUp } from "lucide-react";
+import { BookOpen, Lightbulb, Plus, Target, TrendingUp, ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { loadMemories } from "@/lib/server/memories";
@@ -27,6 +27,17 @@ function NewMemoryButton() {
       <Link href="/memories/new">
         <Plus className="h-4 w-4 mr-2" />
         New Memory
+      </Link>
+    </Button>
+  );
+}
+
+function BackToDashboardButton() {
+  return (
+    <Button asChild variant="outline">
+      <Link href="/">
+        <ArrowLeft className="h-4 w-4 mr-2" />
+        Back to Dashboard
       </Link>
     </Button>
   );
@@ -124,7 +135,10 @@ export default async function PracticePage() {
             Personalized coding problems generated from your coding history.
           </p>
         </div>
-        <NewMemoryButton />
+        <div className="flex flex-wrap items-center gap-2">
+          <NewMemoryButton />
+          <BackToDashboardButton />
+        </div>
       </div>
 
       {error && (

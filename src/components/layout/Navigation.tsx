@@ -20,8 +20,8 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export function Navigation() {
   return (
-    <nav className="sticky top-0 z-50 border-b border-slate-800 bg-slate-900/90 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
+    <nav className="sticky top-0 z-50 border-b border-slate-800 bg-slate-900/90 backdrop-blur-md" suppressHydrationWarning>
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6" suppressHydrationWarning>
         <Link href="/" className="flex items-center gap-2.5">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white font-bold shadow-md shadow-blue-500/20">
             <Code2 className="h-5 w-5 text-white" />
@@ -49,6 +49,12 @@ export function Navigation() {
             <span className="flex items-center gap-1.5 py-1">
               <BarChart3 className="h-4 w-4" />
               Analytics
+            </span>
+          </Link000>
+          <Link000 href="/practice" className="hover:text-blue-400 transition-colors">
+            <span className="flex items-center gap-1.5 py-1">
+              <Sparkles className="h-4 w-4" />
+              Practice
             </span>
           </Link000>
         </div>
@@ -84,9 +90,9 @@ export function Navigation() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="focus:bg-blue-600 focus:text-white cursor-pointer">
-                <Link href="/memories/new" className="flex items-center gap-2">
-                  <Plus className="h-4 w-4" />
-                  Save New Memory
+                <Link href="/practice" className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4" />
+                  Practice
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>

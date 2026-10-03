@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
+
 import { Link000, Link001, Link004 } from "@/components/ui/skiper-ui/skiper40";
 import {
   Brain,
@@ -10,10 +11,10 @@ import {
   AlertTriangle,
   MessageSquare,
   ArrowRight,
-  Sparkles,
   Zap,
   Code2,
   CheckCircle2,
+  Sparkles,
 } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -71,7 +72,7 @@ const pipeline = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-900 text-slate-100 selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-slate-900 text-slate-100 selection:bg-blue-600 selection:text-white" suppressHydrationWarning>
       {/* Header */}
       <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-900/90 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
@@ -92,7 +93,16 @@ export default function Home() {
               Save Memory
             </Link000>
             <Link000 href="/dashboard/overview" className="hover:text-blue-400 transition-colors">
-              Analytics
+              Dashboard
+            </Link000>
+            <Link000 href="/practice" className="hover:text-blue-400 transition-colors">
+              <span className="flex items-center gap-1.5 py-1">
+                <Sparkles className="h-4 w-4" />
+                Practice
+              </span>
+            </Link000>
+            <Link000 href="/memories/new" className="hover:text-blue-400 transition-colors">
+              Save Memory
             </Link000>
           </nav>
 
@@ -257,7 +267,7 @@ export default function Home() {
             <Code2 className="h-4 w-4 text-blue-500" />
             <span>DevMemory</span>
           </div>
-          <p>© {new Date().getFullYear()} DevMemory — Personalized AI Coding Memory</p>
+          <p suppressHydrationWarning>© {new Date().getFullYear()} DevMemory — Personalized AI Coding Memory</p>
         </div>
       </footer>
     </div>

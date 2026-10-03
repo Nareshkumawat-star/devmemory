@@ -104,7 +104,10 @@ export async function generatePractice({
     max_tokens: 1024,
   };
 
-  const result = await post<{ choices: Array<{ message: { content: string } }> }>("/chat/completions", body);
+  const result = await post<{ choices: Array<{ message: { content: string } }> }>(
+    "/chat/completions",
+    body,
+  );
 
   if (!result.choices?.[0]?.message?.content) {
     throw new Error("Gemma returned an empty practice recommendation.");
@@ -117,10 +120,6 @@ export async function generatePractice({
     );
   } catch (error) {
     throw new Error(`Gemma returned invalid JSON: ${error}`);
-  }
-
-  if (!parsed || typeof parsed.problem !== "string" || !parsed.problem.trim()) {
-    throw new Error("Gemma returned an empty practice recommendation.");
   }
 
   const requestedDifficulty: Difficulty = difficulty ?? "intermediate";
@@ -142,3 +141,113 @@ export async function generatePractice({
     difficulty: resolvedDifficulty,
   };
 }
+
+/**
+ * Gemma sometimes emits prose, markdown fences, or code blocks around its
+ * JSON even when told not to. This retries with a stricter, short prompt so
+ * the caller gets a clean recommendation instead of a 502.
+ */
+async function generatePracticeWithRetry(
+  difficulty: Difficulty,
+  topics: string[],
+  excludeMemoryIds: string[],
+  context: string,
+): Promise<PracticeRecommendationResponse> {
+  const maxAttempts = 2;
+  let resolvedDifficulty: Difficulty = difficulty ?? "intermediate";
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    const result = await generatePractice({
+      difficulty: resolvedDifficulty,
+      topics,
+      excludeMemoryIds,
+      context,
+    });
+
+    // The model occasionally ignores the shape instruction and pastes a full
+    // explanation plus a code block. Catch those, and retry with a stricter
+    // prompt that forbids extra text.
+    if (
+      result.problem.includes("\n") ||
+      result.problem.includes("```") ||
+      result.approachHint.includes("\n") ||
+      result.tests.some((test) => test.includes("```"))
+    ) {
+      if (attempt === maxAttempts) return result;
+
+      const retryPrompt =
+        "Return ONLY a single JSON object. No markdown fences, no prose, no explanation. Shape:\n" +
+        JSON.stringify(
+          {
+            problem: "short problem statement",
+            approachHint: "one sentence",
+            constraints: "comma separated",
+            tests: ["plain test 1", "plain test 2"],
+            rationale: "one sentence",
+            difficulty: resolvedDifficulty,
+          },
+          null,
+          2,
+        );
+
+      const retryBody = {
+        model: config.model,
+        messages: [
+          {
+            role: "system",
+            content:
+              `You are a coding practice generator. Return EXACTLY one JSON object only, no markdown fences, no prose, no code blocks.\n${retryPrompt}`,
+          },
+          {
+            role: "user",
+            content: [
+              "Difficulty:", difficulty,
+              "Topics:", topics.join(", ") || "none",
+              "Exclude memory IDs:", excludeMemoryIds.join(", ") || "none",
+              "Context:", context,
+              "Return exactly one fresh practice problem and its tests. Raw JSON only.",
+            ].join("\n"),
+          },
+        ],
+        temperature: 0.3,
+        max_tokens: 1024,
+      };
+
+      const retryResult = await post<{ choices: Array<{ message: { content: string } }> }>(
+        "/chat/completions",
+        retryBody,
+      );
+
+      if (!retryResult.choices?.[0]?.message?.content) {
+        throw new Error("Gemma returned an empty practice recommendation.");
+      }
+
+      const retryParsed = parseModelJson<PracticeRecommendationResponse>(
+        retryResult.choices[0].message.content,
+      );
+
+      if (retryParsed && typeof retryParsed.problem === "string" && retryParsed.problem.trim()) {
+        resolvedDifficulty =
+          retryParsed.difficulty === "beginner" ||
+          retryParsed.difficulty === "intermediate" ||
+          retryParsed.difficulty === "advanced"
+            ? retryParsed.difficulty
+            : difficulty ?? "intermediate";
+
+        return {
+          problem: retryParsed.problem,
+          approachHint: retryParsed.approachHint,
+          constraints: retryParsed.constraints,
+          tests: Array.isArray(retryParsed.tests) ? retryParsed.tests : [],
+          rationale: retryParsed.rationale,
+          difficulty: resolvedDifficulty,
+        };
+      }
+    }
+
+    return result;
+  }
+
+  throw new Error("Gemma returned an unreadable practice recommendation.");
+}
+

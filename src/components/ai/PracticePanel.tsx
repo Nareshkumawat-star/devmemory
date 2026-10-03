@@ -60,7 +60,9 @@ export function PracticePanel({ hasMemories }: PracticePanelProps) {
       } & Partial<GeneratedProblem> | null;
 
       if (!response.ok || !data?.problem) {
-        throw new Error(data?.error || "Failed to generate a practice problem.");
+        setProblem(null);
+        setErrorMessage(data?.error || "Failed to generate a practice problem.");
+        return;
       }
 
       setProblem(data as GeneratedProblem);
