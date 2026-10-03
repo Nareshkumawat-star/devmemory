@@ -92,17 +92,14 @@ export default function Home() {
             <Link000 href="/memories/new" className="hover:text-blue-400 transition-colors">
               Save Memory
             </Link000>
-            <Link000 href="/dashboard/overview" className="hover:text-blue-400 transition-colors">
-              Dashboard
+            <Link000 href="/analytics" className="hover:text-blue-400 transition-colors">
+              Analytics
             </Link000>
             <Link000 href="/practice" className="hover:text-blue-400 transition-colors">
               <span className="flex items-center gap-1.5 py-1">
                 <Sparkles className="h-4 w-4" />
                 Practice
               </span>
-            </Link000>
-            <Link000 href="/memories/new" className="hover:text-blue-400 transition-colors">
-              Save Memory
             </Link000>
           </nav>
 

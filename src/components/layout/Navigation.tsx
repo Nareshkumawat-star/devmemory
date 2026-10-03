@@ -45,7 +45,7 @@ export function Navigation() {
               New Memory
             </span>
           </Link000>
-          <Link000 href="/dashboard/overview" className="hover:text-blue-400 transition-colors">
+          <Link000 href="/analytics" className="hover:text-blue-400 transition-colors">
             <span className="flex items-center gap-1.5 py-1">
               <BarChart3 className="h-4 w-4" />
               Analytics
