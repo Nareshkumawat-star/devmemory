@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { MemoryEditor } from "@/components/memory/MemoryEditor";
 import type { CreateMemoryInput } from "@/lib/validations";
 
+import { Layout } from "@/components/layout/Layout";
+
 export default function NewMemoryPage() {
   const router = useRouter();
 
@@ -26,8 +28,16 @@ export default function NewMemoryPage() {
   };
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8">
-      <MemoryEditor onSubmit={handleSubmit} />
-    </div>
+    <Layout>
+      <div className="mx-auto max-w-4xl space-y-8">
+        <div className="pb-4 border-b border-slate-800/80">
+          <h1 className="text-3xl font-bold tracking-tight text-white">Save a Coding Memory</h1>
+          <p className="text-slate-400 mt-1 text-sm">
+            Document coding errors, stack traces, and solutions to expand your personal AI memory base.
+          </p>
+        </div>
+        <MemoryEditor onSubmit={handleSubmit} />
+      </div>
+    </Layout>
   );
 }

@@ -25,53 +25,57 @@ function NewMemoryButton() {
   );
 }
 
+import { Layout } from "@/components/layout/Layout";
+
 export default async function OverviewPage() {
   const { memories, error } = await loadMemories();
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-muted-foreground mt-1">Track your coding mistakes, progress, and improvement over time.</p>
+    <Layout>
+      <div className="space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-slate-800/80">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-white">Dashboard Overview</h1>
+            <p className="text-slate-400 mt-1 text-sm">Track your coding mistakes, progress, and improvement over time.</p>
+          </div>
+          <NewMemoryButton />
         </div>
-        <NewMemoryButton />
+
+        {error && (
+          <Alert variant="destructive">
+            <AlertTitle>Could not load your memories</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
+        {!error && memories.length === 0 && (
+          <EmptyState
+            title="No memories yet"
+            description="Save your first coding mistake, lesson, or approach and it will show up here."
+            action={<NewMemoryButton />}
+          />
+        )}
+
+        {!error && memories.length > 0 && (
+          <>
+            <AnalyticsDashboard memories={memories} />
+
+            <Card className="bg-slate-900/60 border-slate-800 text-slate-100">
+              <CardHeader>
+                <CardTitle className="text-xl font-bold text-white">Recent Memories</CardTitle>
+                <CardDescription className="text-slate-400">Your latest coding mistakes and lessons</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {memories.map((memory) => (
+                    <MemoryCard key={memory._id} memory={memory} />
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        )}
       </div>
-
-      {error && (
-        <Alert variant="destructive">
-          <AlertTitle>Could not load your memories</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
-
-      {!error && memories.length === 0 && (
-        <EmptyState
-          title="No memories yet"
-          description="Save your first coding mistake, lesson, or approach and it will show up here."
-          action={<NewMemoryButton />}
-        />
-      )}
-
-      {!error && memories.length > 0 && (
-        <>
-          <AnalyticsDashboard memories={memories} />
-
-          <Card className="sm:col-span-2">
-            <CardHeader>
-              <CardTitle>Recent Memories</CardTitle>
-              <CardDescription>Your latest coding mistakes and lessons</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {memories.map((memory) => (
-                  <MemoryCard key={memory._id} memory={memory} />
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </>
-      )}
-    </div>
+    </Layout>
   );
 }

@@ -6,17 +6,21 @@ export const metadata: Metadata = {
   description: "Ask questions about your coding memories.",
 };
 
+import { Layout } from "@/components/layout/Layout";
+
 export default function AskPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8">
-      <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold tracking-tight">Ask the AI</h1>
-        <p className="mt-2 text-muted-foreground">
-          Your coding memories power personalized answers.
-        </p>
-      </div>
+    <Layout>
+      <div className="mx-auto max-w-4xl space-y-8">
+        <div className="pb-4 border-b border-slate-800/80 text-center">
+          <h1 className="text-3xl font-bold tracking-tight text-white">Ask DevMemory AI</h1>
+          <p className="mt-1.5 text-slate-400 text-sm max-w-xl mx-auto">
+            Receive personalized answers strictly grounded in your own historical coding mistakes and solutions.
+          </p>
+        </div>
 
-      <AskPanel />
-    </div>
+        <AskPanel />
+      </div>
+    </Layout>
   );
 }

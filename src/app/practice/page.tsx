@@ -122,82 +122,85 @@ const insightIcons = {
   target: Target,
 } as const;
 
+import { Layout } from "@/components/layout/Layout";
+
 export default async function PracticePage() {
   const { memories, error } = await loadMemories();
   const insights = buildInsights(memories);
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Practice</h1>
-          <p className="text-muted-foreground mt-1">
-            Personalized coding problems generated from your coding history.
-          </p>
+    <Layout>
+      <div className="space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-slate-800/80">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-white">Personalized Practice</h1>
+            <p className="text-slate-400 mt-1 text-sm">
+              Coding problems dynamically generated targeting your exact weak topics and past coding mistakes.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <NewMemoryButton />
+            <BackToDashboardButton />
+          </div>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <NewMemoryButton />
-          <BackToDashboardButton />
-        </div>
-      </div>
 
-      {error && (
-        <Alert variant="destructive">
-          <AlertTitle>Could not load your memories</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
+        {error && (
+          <Alert variant="destructive">
+            <AlertTitle>Could not load your memories</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
 
-      {!error && memories.length === 0 && (
-        <EmptyState
-          title="Nothing to practice from yet"
-          description="Save a memory about a bug or lesson first — practice problems are generated from your own coding history."
-          action={<NewMemoryButton />}
-        />
-      )}
+        {!error && memories.length === 0 && (
+          <EmptyState
+            title="Nothing to practice from yet"
+            description="Save a memory about a bug or lesson first — practice problems are generated from your own coding history."
+            action={<NewMemoryButton />}
+          />
+        )}
 
-      {!error && memories.length > 0 && (
-        <>
-          <PracticePanel hasMemories={memories.length > 0} />
+        {!error && memories.length > 0 && (
+          <>
+            <PracticePanel hasMemories={memories.length > 0} />
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BookOpen className="h-5 w-5" />
-                Your History
-              </CardTitle>
-              <CardDescription>
-                Mistakes and lessons that inform your practice
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {insights.length === 0 ? (
-                <p className="text-sm text-muted-foreground">
-                  Add a lesson learned to your memories and your recurring
-                  patterns will show up here.
-                </p>
-              ) : (
-                <div className="space-y-3">
-                  {insights.map((insight, index) => {
-                    const Icon = insightIcons[insight.icon];
-                    return (
-                      <div key={index} className="p-4 rounded-md bg-muted/30">
-                        <div className="flex items-center gap-2 text-sm font-medium">
-                          <Icon className={`h-4 w-4 ${insight.accent}`} />
-                          <span>{insight.title}</span>
+            <Card className="bg-slate-900/60 border-slate-800 text-slate-100">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-xl font-bold text-white">
+                  <BookOpen className="h-5 w-5 text-blue-400" />
+                  Your Coding History Insights
+                </CardTitle>
+                <CardDescription className="text-slate-400">
+                  Mistakes and lessons that inform your practice problem generation
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {insights.length === 0 ? (
+                  <p className="text-sm text-slate-400">
+                    Add a lesson learned to your memories and your recurring patterns will show up here.
+                  </p>
+                ) : (
+                  <div className="space-y-3">
+                    {insights.map((insight, index) => {
+                      const Icon = insightIcons[insight.icon];
+                      return (
+                        <div key={index} className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60">
+                          <div className="flex items-center gap-2 text-sm font-semibold text-slate-200">
+                            <Icon className={`h-4 w-4 ${insight.accent}`} />
+                            <span>{insight.title}</span>
+                          </div>
+                          <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
+                            {insight.detail}
+                          </p>
                         </div>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          {insight.detail}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </>
-      )}
-    </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </>
+        )}
+      </div>
+    </Layout>
   );
 }
