@@ -1,0 +1,64 @@
+# Render Blueprint for devmemory
+# Docs: https://render.com/docs/blueprint-spec
+#
+# Deploy: push this file, then in Render click "New +" -> "Blueprint" and pick
+# this repo. Secrets marked `sync: false` are NOT stored here; Render prompts
+# for them once and keeps them in the dashboard.
+#
+# The AI layer is configured purely through env vars (see src/lib/env.ts).
+# On Render there is no local Ollama, so point GEMMA_API_URL at a hosted
+# OpenAI-compatible endpoint instead (e.g. https://openrouter.ai/api/v1).
+
+services:
+  - type: web
+    name: devmemory
+    runtime: node
+    # `starter` is $7/mo and stays always-on. `free` costs nothing but spins
+    # down after 15 min idle, so the next request waits ~30-60s.
+    plan: starter
+    region: oregon
+    branch: main
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      # Render injects PORT automatically; pinning it matches the default.
+      - key: PORT
+        value: 10000
+      # Render picks a current LTS Node by default. Pin it if you ever need to:
+      #   - key: NODE_VERSION
+      #     value: 24.11.0
+      - key: NODE_ENV
+        value: production
+
+      # --- Database (MongoDB Atlas) ---
+      # Atlas -> Network Access must allow this service. Either add Render's
+      # static egress IPs (Starter plan and above) or 0.0.0.0/0 while testing.
+      - key: MONGODB_URI
+        sync: false
+      - key: MONGODB_DB_NAME
+        sync: false
+
+      # --- Auth ---
+      - key: AUTH_SECRET
+        generateValue: true
+      - key: AUTH_URL
+        sync: false
+
+      # --- AI (OpenAI-compatible chat completions endpoint) ---
+      # Hosted swap for local Ollama. Only these three change; no code edits.
+      - key: GEMMA_API_URL
+        sync: false
+      - key: GEMMA_API_KEY
+        sync: false
+      - key: GEMMA_MODEL
+        sync: false
+
+      # --- Embeddings (optional) ---
+      - key: EMBEDDING_API_URL
+        sync: false
+      - key: EMBEDDING_API_KEY
+        sync: false
+      - key: EMBEDDING_MODEL
+        sync: false
