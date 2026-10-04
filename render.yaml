@@ -13,9 +13,11 @@ services:
   - type: web
     name: devmemory
     runtime: node
-    # `starter` is $7/mo and stays always-on. `free` costs nothing but spins
-    # down after 15 min idle, so the next request waits ~30-60s.
-    plan: starter
+    # `free` needs NO payment method on the account and draws down none of your
+    # credit. It spins down after 15 min idle, so the next request waits ~30-60s.
+    # Switching to `starter` ($7/mo, always-on) requires a card on file first,
+    # even though the promo credit would cover the bill.
+    plan: free
     region: oregon
     branch: main
     buildCommand: npm ci && npm run build
