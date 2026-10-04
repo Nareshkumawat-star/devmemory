@@ -6,6 +6,7 @@ import {
 } from "@/lib/mongodb";
 import { practiceSchema } from "@/lib/validations";
 import { generatePractice } from "@/lib/ai/practice";
+import { getGemmaConfig } from "@/lib/env";
 
 function getUserId(request: NextRequest): string {
   const token = request.cookies.get("next-auth.session-token")?.value || "anonymous";
@@ -13,13 +14,38 @@ function getUserId(request: NextRequest): string {
 }
 
 /**
+ * True for endpoints that only exist on a developer's machine. On a hosted
+ * deployment such a URL resolves to the service itself, so "start your local
+ * server" is not advice the user can act on.
+ */
+function isLocalEndpoint(url: string): boolean {
+  try {
+    const { hostname } = new URL(url);
+    return ["localhost", "127.0.0.1", "0.0.0.0", "::1", "[::1]"].includes(hostname);
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Gemma runs locally (Ollama on :11434 by default), so its failures are
- * almost always "the server isn't running" rather than application bugs.
+ * almost always "the server isn't running" rather than application bugs — but
+ * that advice only holds on a developer's machine.
  */
 function describeAIError(error: unknown): string {
   const message = error instanceof Error ? error.message : String(error);
 
   if (/fetch failed|ECONNREFUSED|ENOTFOUND|EAI_AGAIN|network/i.test(message)) {
+    const { baseUrl } = getGemmaConfig();
+
+    if (process.env.NODE_ENV === "production" && isLocalEndpoint(baseUrl)) {
+      return (
+        `The AI endpoint is "${baseUrl}", which only resolves on a local machine. ` +
+        "Set GEMMA_API_URL to a hosted OpenAI-compatible endpoint (plus GEMMA_API_KEY and " +
+        "GEMMA_MODEL) in this service's environment settings, then restart it."
+      );
+    }
+
     return (
       "Could not reach the AI model. Start your local server (e.g. `ollama serve`) " +
       "or check GEMMA_API_URL in .env.local."
