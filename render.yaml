@@ -20,7 +20,11 @@ services:
     plan: free
     region: oregon
     branch: main
-    buildCommand: npm ci && npm run build
+    # --include=dev is required: NODE_ENV=production makes npm omit
+    # devDependencies, but the build needs them (typescript, tailwindcss and
+    # @tailwindcss/postcss all live there). Without it the build dies with
+    # "Cannot find module '@tailwindcss/postcss'".
+    buildCommand: npm ci --include=dev && npm run build
     startCommand: npm start
     healthCheckPath: /
     autoDeploy: true
