@@ -46,23 +46,33 @@ export interface GemmaConfig {
 }
 
 const DECOMMISSIONED_MODELS: Record<string, string> = {
-  "deepseek-r1-distill-llama-70b": "llama-3.1-8b-instant",
-  "llama-3.3-70b-versatile": "llama-3.1-8b-instant",
-  "llama3-70b-8192": "llama-3.1-8b-instant",
-  "llama3-8b-8192": "llama-3.1-8b-instant",
-  "mixtral-8x7b-32768": "llama-3.1-8b-instant",
+  "deepseek-r1-distill-llama-70b": "openai/gpt-oss-20b",
+  "llama-3.3-70b-versatile": "openai/gpt-oss-20b",
+  "llama-3.1-8b-instant": "openai/gpt-oss-20b",
+  "llama3-70b-8192": "openai/gpt-oss-20b",
+  "llama3-8b-8192": "openai/gpt-oss-20b",
+  "mixtral-8x7b-32768": "openai/gpt-oss-20b",
+  "gemma2:9b": "openai/gpt-oss-20b",
+  "gemma-7b-it": "openai/gpt-oss-20b",
 };
 
 export function getGemmaConfig(): GemmaConfig {
   const rawUrl = process.env.GEMMA_API_URL || env.GEMMA_API_URL || "http://localhost:11434/v1";
   const rawKey = process.env.GEMMA_API_KEY || env.GEMMA_API_KEY || "local";
-  const rawModel = process.env.GEMMA_MODEL || env.GEMMA_MODEL || "gemma2:9b";
+  const rawModel = process.env.GEMMA_MODEL || env.GEMMA_MODEL || "openai/gpt-oss-20b";
 
+  const sanitizedUrl = rawUrl.trim().replace(/[\r\n]+/g, "").replace(/\/+$/, "");
   const sanitizedModel = rawModel.trim().replace(/[\r\n]+/g, "");
-  const model = DECOMMISSIONED_MODELS[sanitizedModel] ?? sanitizedModel;
+
+  let model = DECOMMISSIONED_MODELS[sanitizedModel] ?? sanitizedModel;
+
+  // If pointing to Groq and model is not recognized or legacy, default to openai/gpt-oss-20b
+  if (sanitizedUrl.includes("groq.com") && (!model || DECOMMISSIONED_MODELS[model])) {
+    model = "openai/gpt-oss-20b";
+  }
 
   return {
-    baseUrl: rawUrl.trim().replace(/[\r\n]+/g, "").replace(/\/+$/, ""),
+    baseUrl: sanitizedUrl,
     apiKey: rawKey.trim().replace(/[\r\n]+/g, ""),
     model,
   };
