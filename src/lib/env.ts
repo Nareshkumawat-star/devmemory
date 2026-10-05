@@ -45,14 +45,24 @@ export interface GemmaConfig {
   model: string;
 }
 
+const DECOMMISSIONED_MODELS: Record<string, string> = {
+  "deepseek-r1-distill-llama-70b": "llama-3.3-70b-versatile",
+  "llama3-70b-8192": "llama-3.3-70b-versatile",
+  "llama3-8b-8192": "llama-3.1-8b-instant",
+  "mixtral-8x7b-32768": "llama-3.3-70b-versatile",
+};
+
 export function getGemmaConfig(): GemmaConfig {
   const rawUrl = process.env.GEMMA_API_URL || env.GEMMA_API_URL || "http://localhost:11434/v1";
   const rawKey = process.env.GEMMA_API_KEY || env.GEMMA_API_KEY || "local";
   const rawModel = process.env.GEMMA_MODEL || env.GEMMA_MODEL || "gemma2:9b";
 
+  const sanitizedModel = rawModel.trim().replace(/[\r\n]+/g, "");
+  const model = DECOMMISSIONED_MODELS[sanitizedModel] ?? sanitizedModel;
+
   return {
     baseUrl: rawUrl.trim().replace(/[\r\n]+/g, "").replace(/\/+$/, ""),
     apiKey: rawKey.trim().replace(/[\r\n]+/g, ""),
-    model: rawModel.trim().replace(/[\r\n]+/g, ""),
+    model,
   };
 }
