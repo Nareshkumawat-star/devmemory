@@ -2,9 +2,8 @@ import { getGemmaConfig } from "@/lib/env";
 import { parseModelJson } from "@/lib/ai/parseModelJson";
 import type { Difficulty } from "@/lib/validations/memories";
 
-const config = getGemmaConfig();
-
 function buildHeaders(): Record<string, string> {
+  const config = getGemmaConfig();
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
@@ -17,6 +16,7 @@ function buildHeaders(): Record<string, string> {
 }
 
 async function post<T>(path: string, body: unknown): Promise<T> {
+  const config = getGemmaConfig();
   const response = await fetch(`${config.baseUrl}${path}`, {
     method: "POST",
     headers: buildHeaders(),
@@ -70,6 +70,7 @@ export async function generatePractice({
   excludeMemoryIds,
   context,
 }: PracticeRecommendationRequest): Promise<PracticeRecommendationResponse> {
+  const config = getGemmaConfig();
   if (!config.baseUrl) {
     throw new Error("GEMMA_API_URL is not configured");
   }
@@ -190,8 +191,9 @@ async function generatePracticeWithRetry(
           2,
         );
 
+      const retryConfig = getGemmaConfig();
       const retryBody = {
-        model: config.model,
+        model: retryConfig.model,
         messages: [
           {
             role: "system",

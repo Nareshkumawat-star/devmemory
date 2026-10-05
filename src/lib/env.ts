@@ -28,10 +28,14 @@ export interface EmbeddingConfig {
 }
 
 export function getEmbeddingConfig(): EmbeddingConfig {
+  const rawUrl = process.env.EMBEDDING_API_URL || env.EMBEDDING_API_URL || "https://api.openai.com/v1";
+  const rawKey = process.env.EMBEDDING_API_KEY || env.EMBEDDING_API_KEY || "";
+  const rawModel = process.env.EMBEDDING_MODEL || env.EMBEDDING_MODEL || "text-embedding-3-small";
+
   return {
-    url: env.EMBEDDING_API_URL ?? "https://api.openai.com/v1",
-    key: env.EMBEDDING_API_KEY ?? "",
-    model: env.EMBEDDING_MODEL ?? "text-embedding-3-small",
+    url: rawUrl.trim().replace(/[\r\n]+/g, ""),
+    key: rawKey.trim().replace(/[\r\n]+/g, ""),
+    model: rawModel.trim().replace(/[\r\n]+/g, ""),
   };
 }
 
@@ -42,9 +46,13 @@ export interface GemmaConfig {
 }
 
 export function getGemmaConfig(): GemmaConfig {
+  const rawUrl = process.env.GEMMA_API_URL || env.GEMMA_API_URL || "http://localhost:11434/v1";
+  const rawKey = process.env.GEMMA_API_KEY || env.GEMMA_API_KEY || "local";
+  const rawModel = process.env.GEMMA_MODEL || env.GEMMA_MODEL || "gemma2:9b";
+
   return {
-    baseUrl: env.GEMMA_API_URL ?? "http://localhost:11434/v1",
-    apiKey: env.GEMMA_API_KEY ?? "local",
-    model: env.GEMMA_MODEL ?? "gemma2:9b",
+    baseUrl: rawUrl.trim().replace(/[\r\n]+/g, "").replace(/\/+$/, ""),
+    apiKey: rawKey.trim().replace(/[\r\n]+/g, ""),
+    model: rawModel.trim().replace(/[\r\n]+/g, ""),
   };
 }

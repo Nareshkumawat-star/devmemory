@@ -1,9 +1,8 @@
 import { getGemmaConfig } from "@/lib/env";
 import type { CodingMemory } from "@/types";
 
-const config = getGemmaConfig();
-
 function buildHeaders(): Record<string, string> {
+  const config = getGemmaConfig();
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
@@ -16,6 +15,7 @@ function buildHeaders(): Record<string, string> {
 }
 
 async function post<T>(path: string, body: unknown): Promise<T> {
+  const config = getGemmaConfig();
   const response = await fetch(`${config.baseUrl}${path}`, {
     method: "POST",
     headers: buildHeaders(),
@@ -78,6 +78,7 @@ Rules:
 - Do not emit markdown fences. Emit raw text.`;
 
 export async function askQuestion({ question, memories, userId }: AskQuestionInput): Promise<AskQuestionResponse> {
+  const config = getGemmaConfig();
   if (!config.baseUrl) {
     throw new Error("GEMMA_API_URL is not configured");
   }
