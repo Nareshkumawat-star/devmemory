@@ -1,8 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
+import VectorWordmark from "@/components/ui/vector-wordmark";
 
-import { Link000, Link001, Link004 } from "@/components/ui/skiper-ui/skiper40";
+import { Link000, Link001 } from "@/components/ui/skiper-ui/skiper40";
 import {
   Brain,
   Search,
@@ -10,7 +11,6 @@ import {
   Dumbbell,
   AlertTriangle,
   MessageSquare,
-  ArrowRight,
   Zap,
   Code2,
   CheckCircle2,
@@ -32,6 +32,7 @@ const features = [
   },
   {
     icon: Search,
+    iconOffset: "-translate-x-0.5",
     title: "Atlas Vector Search",
     description:
       "Vector embeddings search your historical memories semantically, matching logic patterns rather than just keywords.",
@@ -75,17 +76,19 @@ export default function Home() {
     <div className="min-h-screen flex flex-col bg-slate-900 text-slate-100 selection:bg-blue-600 selection:text-white" suppressHydrationWarning>
       {/* Header */}
       <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-900/90 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white font-bold shadow-md shadow-blue-500/20">
-              <Code2 className="h-5 w-5 text-white" />
-            </div>
-            <span className="text-xl font-bold tracking-tight text-white">
-              Dev<span className="text-blue-400">Memory</span>
-            </span>
-          </Link>
+        <div className="mx-auto grid grid-cols-[auto_1fr_auto] h-16 max-w-7xl items-center px-6">
+          <div className="flex items-center">
+            <Link href="/" className="flex items-center gap-2.5">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white font-bold shadow-md shadow-blue-500/20">
+                <Code2 className="h-5 w-5 text-white" strokeWidth={2} />
+              </div>
+              <span className="text-xl font-bold tracking-tight text-white">
+                Dev<span className="text-blue-400">Memory</span>
+              </span>
+            </Link>
+          </div>
 
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
+          <nav className="hidden md:flex items-center justify-center gap-8 text-sm font-medium text-slate-300">
             <Link000 href="/dashboard/overview" className="hover:text-blue-400 transition-colors">
               Dashboard
             </Link000>
@@ -96,17 +99,14 @@ export default function Home() {
               Analytics
             </Link000>
             <Link000 href="/practice" className="hover:text-blue-400 transition-colors">
-              <span className="flex items-center gap-1.5 py-1">
-                <Sparkles className="h-4 w-4" />
-                Practice
-              </span>
+              Practice
             </Link000>
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center justify-end gap-3">
             <Button size="sm" asChild className="bg-blue-600 hover:bg-blue-500 text-white font-medium shadow-sm">
               <Link href="/memories/new" className="flex items-center gap-1.5">
-                <Sparkles className="h-4 w-4" />
+                <Sparkles className="h-4 w-4" strokeWidth={2} />
                 New Memory
               </Link>
             </Button>
@@ -115,10 +115,10 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-20 pb-16 gradient-bg-hero">
-        <div className="relative mx-auto flex max-w-5xl flex-col items-center gap-8 px-6 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1.5 text-xs font-semibold text-blue-300">
-            <Sparkles className="h-3.5 w-3.5 text-blue-400" />
+      <section className="relative overflow-hidden pt-16 pb-14 gradient-bg-hero">
+        <div className="relative mx-auto flex max-w-5xl flex-col items-center gap-6 px-6 text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1.5 text-xs font-semibold text-blue-400">
+            <Sparkles className="h-3.5 w-3.5 text-blue-400" strokeWidth={2} />
             <span>Powered by Gemma AI & Atlas Vector Search</span>
           </div>
 
@@ -134,31 +134,31 @@ export default function Home() {
           <div className="flex flex-wrap items-center justify-center gap-6 pt-2">
             <Button size="lg" asChild className="bg-blue-600 hover:bg-blue-500 text-white font-medium shadow-md shadow-blue-600/20 h-12 px-7">
               <Link href="/memories/new" className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4" strokeWidth={2} />
                 Save your first memory
-                <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
-            <Link001 href="/dashboard/overview" className="text-blue-400 font-semibold text-base hover:text-blue-300">
+            <Link001 href="/dashboard/overview" className="text-blue-400 font-semibold text-base hover:text-blue-400">
               Explore Dashboard
             </Link001>
           </div>
 
           {/* Stats Bar */}
-          <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-4 w-full max-w-3xl">
+          <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4 w-full max-w-3xl">
             <div className="rounded-xl border border-slate-800 bg-slate-800/50 p-4 text-center">
               <div className="text-xl font-bold text-blue-400">RAG Pipeline</div>
               <div className="text-xs text-slate-400 mt-1">Vector Grounded</div>
             </div>
             <div className="rounded-xl border border-slate-800 bg-slate-800/50 p-4 text-center">
-              <div className="text-xl font-bold text-emerald-400">Gemma AI</div>
+              <div className="text-xl font-bold text-blue-400">Gemma AI</div>
               <div className="text-xs text-slate-400 mt-1">Root Cause Analysis</div>
             </div>
             <div className="rounded-xl border border-slate-800 bg-slate-800/50 p-4 text-center">
-              <div className="text-xl font-bold text-sky-400">100% Personal</div>
+              <div className="text-xl font-bold text-blue-400">100% Personal</div>
               <div className="text-xs text-slate-400 mt-1">Your Own History</div>
             </div>
             <div className="rounded-xl border border-slate-800 bg-slate-800/50 p-4 text-center">
-              <div className="text-xl font-bold text-indigo-400">Analytics</div>
+              <div className="text-xl font-bold text-blue-400">Analytics</div>
               <div className="text-xs text-slate-400 mt-1">Weakness Radar</div>
             </div>
           </div>
@@ -166,8 +166,8 @@ export default function Home() {
       </section>
 
       {/* Pipeline */}
-      <section className="mx-auto w-full max-w-6xl px-6 py-16 border-t border-slate-800">
-        <div className="text-center max-w-2xl mx-auto mb-12">
+      <section className="mx-auto w-full max-w-6xl px-6 py-14 border-t border-slate-800">
+        <div className="text-center max-w-2xl mx-auto mb-10">
           <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
             How the <span className="text-blue-400">RAG Pipeline</span> Works
           </h2>
@@ -176,17 +176,17 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5 items-stretch">
           {pipeline.map((item) => (
             <div
               key={item.step}
-              className="rounded-xl border border-slate-800 bg-slate-800/40 p-5 flex flex-col justify-between hover:border-blue-500/50 transition-colors"
+              className="h-full rounded-xl border border-slate-800 bg-slate-800/40 p-5 flex flex-col justify-between hover:border-blue-500/50 transition-colors"
             >
               <div className="flex items-center justify-between mb-4">
-                <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full text-blue-300 bg-blue-500/10 border border-blue-500/20">
+                <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full text-blue-400 bg-blue-500/10 border border-blue-500/20">
                   {item.step}
                 </span>
-                <CheckCircle2 className="h-4 w-4 text-slate-600" />
+                <CheckCircle2 className="h-4 w-4 text-slate-600" strokeWidth={2} />
               </div>
               <div>
                 <h3 className="font-semibold text-base text-slate-100">
@@ -213,33 +213,35 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 items-stretch">
             {features.map((feature) => (
               <div
                 key={feature.title}
-                className="rounded-xl border border-slate-800 bg-slate-800/40 p-6 hover:border-blue-500/40 transition-colors"
+                className="h-full flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-800/40 p-6 hover:border-blue-500/40 transition-colors"
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400 mb-4 border border-blue-500/20">
-                  <feature.icon className="h-5 w-5" />
+                <div>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400 mb-4 border border-blue-500/20">
+                    <feature.icon className={`h-5 w-5 ${feature.iconOffset ?? ""}`} strokeWidth={2} />
+                  </div>
+                  <h3 className="text-lg font-semibold text-slate-100 mb-2">
+                    {feature.title}
+                  </h3>
+                  <p className="text-sm text-slate-400 leading-relaxed">
+                    {feature.description}
+                  </p>
                 </div>
-                <h3 className="text-lg font-semibold text-slate-100 mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-sm text-slate-400 leading-relaxed">
-                  {feature.description}
-                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Card */}
-      <section className="mx-auto w-full max-w-5xl px-6 py-16">
-        <div className="rounded-2xl border border-slate-800 bg-slate-800/50 p-10 text-center">
+      {/* Closing CTA Card */}
+      <section className="mx-auto w-full max-w-5xl px-6 py-14">
+        <div className="rounded-2xl border border-slate-800 bg-slate-800/50 p-8 sm:p-10 text-center">
           <div className="max-w-2xl mx-auto flex flex-col items-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-3.5 py-1 text-xs font-semibold text-blue-300 mb-5">
-              <Zap className="h-3.5 w-3.5 text-blue-400" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-3.5 py-1 text-xs font-semibold text-blue-400 mb-4">
+              <Zap className="h-3.5 w-3.5 text-blue-400" strokeWidth={2} />
               <span>Get started immediately</span>
             </div>
 
@@ -250,21 +252,37 @@ export default function Home() {
               Create your first memory now and let AI elevate your engineering productivity.
             </p>
 
-            <Link004 href="/memories/new" className="text-blue-400 font-semibold text-lg hover:text-blue-300">
-              Create a Memory Now
-            </Link004>
+            <Button size="lg" asChild className="bg-blue-600 hover:bg-blue-500 text-white font-medium shadow-md shadow-blue-600/20 h-12 px-7">
+              <Link href="/memories/new" className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4" strokeWidth={2} />
+                Create a Memory Now
+              </Link>
+            </Button>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="mt-auto border-t border-slate-800 bg-slate-950 py-8 text-center text-xs text-slate-500">
-        <div className="mx-auto max-w-6xl px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 font-semibold text-slate-300">
-            <Code2 className="h-4 w-4 text-blue-500" />
-            <span>DevMemory</span>
+      <footer className="mt-auto border-t border-slate-800 bg-slate-950 pt-8 pb-8 text-xs text-slate-500 overflow-hidden relative">
+        <div className="mx-auto max-w-6xl px-6 flex flex-col items-center gap-6">
+          {/* Vector Wordmark Footer Section */}
+          <div className="w-full h-[200px] sm:h-[260px] rounded-2xl overflow-hidden border border-slate-900 bg-slate-950 relative group">
+            <VectorWordmark />
+            <div className="absolute bottom-3 right-4 px-3 py-1 rounded-md bg-slate-900/90 border border-slate-800/60 text-[10px] font-mono text-slate-400 backdrop-blur-md pointer-events-none">
+              Interactive Vector Typography
+            </div>
           </div>
-          <p suppressHydrationWarning>© {new Date().getFullYear()} DevMemory — Personalized AI Coding Memory</p>
+
+          <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4 pt-2 border-t border-slate-800/60">
+            <div className="flex items-center gap-2 font-semibold text-slate-300">
+              <Code2 className="h-4 w-4 text-blue-500" strokeWidth={2} />
+              <span>DevMemory</span>
+              <span className="text-slate-600">|</span>
+              <span className="text-xs text-slate-400 font-normal">Personalized AI Coding Memory</span>
+            </div>
+
+            <p suppressHydrationWarning>© {new Date().getFullYear()} DevMemory. All rights reserved.</p>
+          </div>
         </div>
       </footer>
     </div>
